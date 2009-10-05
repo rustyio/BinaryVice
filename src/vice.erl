@@ -11,16 +11,17 @@
 % How are lists and dicts handled?
 to_binary(Schema, Term) -> 
     Response = vice_encode:to_binary(Schema, Term),
-    <<Response/binary>>.
+    zlib:zip(Response).
     
 to_binary_version(Version, Schema, Term) ->
     (Version >=0 andalso Version < 256) orelse throw({invalid_version_number, Version}),
-    Response = vice_encode:to_binary(Schema, Term),
+    Response = to_binary(Schema, Term),
     <<Version:8/integer, Response/binary>>.
         
 from_binary(Schema, Binary) -> 
-    {Value, Rest} = vice_decode:from_binary(Schema, Binary),
-    (Rest == <<>>) orelse throw({bytes_left_over, Binary}),
+    Binary1 = zlib:unzip(Binary),
+    {Value, Rest} = vice_decode:from_binary(Schema, Binary1),
+    (Rest == <<>>) orelse throw({bytes_left_over, Rest}),
     Value.
 
 from_binary_version(Versions, Binary) -> 

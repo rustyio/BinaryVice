@@ -24,6 +24,7 @@ is_placeholder(tuple@) -> true;
 is_placeholder({tuple@, _}) -> true;
 is_placeholder(dict@) -> true;
 is_placeholder({dict@, _, _}) -> true;
+is_placeholder(term@) -> true;
 is_placeholder(_) -> false.
 
 % is_placeholder(Schema, Term) - Return true if the provided Schema
@@ -49,6 +50,7 @@ ensure_matching_types(tuple@, O) -> is_tuple(O) orelse throw({not_a_tuple, O});
 ensure_matching_types({tuple@, _}, O) -> is_tuple(O) orelse throw({not_a_tuple, O});
 ensure_matching_types(dict@, O) -> is_tuple(O) orelse throw({not_a_dict, O});
 ensure_matching_types({dict@, _, _}, O) -> is_tuple(O) orelse throw({not_a_dict, O});
+ensure_matching_types(term@, _) -> true;
 ensure_matching_types(Schema, _) -> throw({ensure_matching_types, unknown_type, Schema}).
 
 % Return an atom that signifies the type of O.

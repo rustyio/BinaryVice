@@ -12,11 +12,11 @@ from_binary(Schema, Binary) ->
     
 walk(list, Schema, Binary) -> 
     Length = length(Schema),
-    F = fun(X, {Values, AccBinary}) ->
-        {Value, AccBinary1} = from_binary(lists:nth(X, Schema), AccBinary),
-        {[Value|Values], AccBinary1}
+    F = fun(_X, {Values, AccBinary, [S|AccSchema]}) ->
+        {Value, AccBinary1} = from_binary(S, AccBinary),
+        {[Value|Values], AccBinary1, AccSchema}
     end,
-    {Values1, Binary1} = lists:foldl(F, {[], Binary}, lists:seq(1, Length)),
+    {Values1, Binary1, _} = lists:foldl(F, {[], Binary, Schema}, lists:seq(1, Length)),
     {lists:reverse(Values1), Binary1};
     
 walk(tuple, Schema, Binary) ->

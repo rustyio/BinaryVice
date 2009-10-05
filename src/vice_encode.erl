@@ -21,11 +21,12 @@ walk(list, Schema, Term) ->
     case {length(Schema), length(Term)} of
         {0, 0} -> <<>>;
         {N, N} ->
-            F = fun(X, AccIn) ->
-                B = to_binary(lists:nth(X, Schema), lists:nth(X, Term)),
-                <<AccIn/binary, B/binary>>
+            F = fun(_, {AccB, [S|AccSchema], [T|AccTerm]}) ->
+                B = to_binary(S, T),
+                {<<AccB/binary, B/binary>>, AccSchema, AccTerm}
             end,
-            lists:foldl(F, <<>>, lists:seq(1, N));
+            {B, _, _} = lists:foldl(F, {<<>>, Schema, Term}, lists:seq(1, N)),
+            B;
         _ -> throw({mismatched_lengths, Schema, Term})
     end;
     

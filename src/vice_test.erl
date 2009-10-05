@@ -1,4 +1,4 @@
--module (test).
+-module (vice_test).
 -compile(export_all).
 
 -record (my_object, {field1, field2, field3}).
@@ -6,7 +6,8 @@
 go() ->
     up_to_date = sync:go(),
     datatypes_test(),
-    versions_test().
+    versions_test(),
+    speed_test().
     
 datatypes_test() ->
     test([atom@, binary@, boolean@, integer@, {integer@, 1}, string@], [atom, <<"b">>, true, -42, 9, "string"]),
@@ -41,10 +42,51 @@ versions_test() ->
         {2, string@}
     ],
     
+    io:format("Test versioning:~n"),
     {1, my_atom} = vice:from_binary_version(Versions, V1),
+    io:format("Version 1 successful...~n"),
     {2, "my_string"} = vice:from_binary_version(Versions, V2),
+    io:format("Version 2 successful...~n"),
     {131, {something_else}} = vice:from_binary_version(Versions, V3),
-    io:format("Versions successful!"),
+    io:format("Version 131 successful...~n"),
+    io:format("Success!"),
     ok.
     
+    
+-define (ITERATIONS, 1000).
+speed_test() ->
+    Schema = #my_object { field1=atom@, field2=integer@, field3=boolean@ },
+    Term = #my_object { field1=hello, field2=5, field3=true },
+    B1 = term_to_binary(Term, [compressed]),
+    B2 = vice:to_binary(Schema, Term),
+    Null = spawn(fun() -> ok end),
+    
+    Start1 = now(),
+    [begin
+        B = term_to_binary(Term, [compressed]),
+        Null!B
+    end || _ <- lists:seq(1, ?ITERATIONS)],
+    io:format("term_to_binary * 1000 = ~.2fms~n", [timer:now_diff(now(), Start1) / 1000]),
+    
+    Start2 = now(),
+    [begin
+        B = vice:to_binary(Schema, Term),
+        Null!B
+    end || _ <- lists:seq(1, ?ITERATIONS)],
+    io:format("vice:to_binary * 1000 = ~.2fms~n", [timer:now_diff(now(), Start2) / 1000]),
+    
+    Start3 = now(),
+    [begin 
+        T = binary_to_term(B1),
+        Null!T
+    end || _ <- lists:seq(1, ?ITERATIONS)],
+    io:format("binary_to_term * 1000 = ~.2fms~n", [timer:now_diff(now(), Start3) / 1000]),
+    
+    Start4 = now(),
+    [begin
+        T = vice:from_binary(Schema, B2),
+        Null!T
+    end|| _ <- lists:seq(1, ?ITERATIONS)],
+    io:format("vice:from_binary * 1000 = ~.2fms~n", [timer:now_diff(now(), Start4) / 1000]),
+    ok.
     
