@@ -20,15 +20,9 @@ walk(list, Schema, Binary) ->
     {lists:reverse(Values1), Binary1};
     
 walk(tuple, Schema, Binary) ->
-    % Decode each item according to its schema, and replace
-    % it in the Schema itself.
-    Length = size(Schema),
-    F = fun(X, {AccSchema, AccBinary}) ->
-        {Value, AccBinary1} = from_binary(element(X, AccSchema), AccBinary),
-        {setelement(X, AccSchema, Value), AccBinary1}
-    end,
-    {_, _} = lists:foldl(F, {Schema, Binary}, lists:seq(1, Length));
-    
+    {Values, Rest} = walk(list, tuple_to_list(Schema), Binary),
+    {list_to_tuple(Values), Rest};
+        
 %%% Didn't match anything, so ignore.
 walk(_, Schema, Binary) -> 
     {Schema, Binary}.
@@ -73,6 +67,10 @@ decode({list@, Schema}, B) ->
     {Values, Rest} = lists:foldl(F, {[], B1}, lists:seq(1, Length)),
     {lists:reverse(Values), Rest};
 
+decode({tuple@, Schema}, B) ->
+    {Values, Rest} = decode({list@, Schema}, B),
+    {list_to_tuple(Values), Rest};
+
 decode(dict@, B) ->
     {List, Rest} = decode(list@, B),
     {dict:from_list(List), Rest};
@@ -88,7 +86,7 @@ decode({dict@, KeySchema, ValueSchema}, B) ->
 
 
 decode(_Schema, B) -> 
-    <<Size:24/integer, B1:Size/binary, Rest/binary>> = B,
+    <<Size:16/integer, B1:Size/binary, Rest/binary>> = B,
     {
         binary_to_term(<<131, B1/binary>>),
         Rest

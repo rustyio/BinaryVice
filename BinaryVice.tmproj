@@ -2,125 +2,70 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>currentDocument</key>
-	<string>src/vice_utils.erl</string>
 	<key>documents</key>
 	<array>
 		<dict>
-			<key>name</key>
-			<string>data</string>
-			<key>regexFolderFilter</key>
-			<string>!.*/(\.[^/]*|CVS|_darcs|_MTN|\{arch\}|blib|.*~\.nib|.*\.(framework|app|pbproj|pbxproj|xcode(proj)?|bundle))$</string>
-			<key>sourceDirectory</key>
-			<string>data</string>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>ebin</string>
-			<key>regexFolderFilter</key>
-			<string>!.*/(\.[^/]*|CVS|_darcs|_MTN|\{arch\}|blib|.*~\.nib|.*\.(framework|app|pbproj|pbxproj|xcode(proj)?|bundle))$</string>
-			<key>sourceDirectory</key>
-			<string>ebin</string>
-		</dict>
-		<dict>
 			<key>filename</key>
 			<string>Emakefile</string>
-		</dict>
-		<dict>
-			<key>name</key>
-			<string>include</string>
-			<key>regexFolderFilter</key>
-			<string>!.*/(\.[^/]*|CVS|_darcs|_MTN|\{arch\}|blib|.*~\.nib|.*\.(framework|app|pbproj|pbxproj|xcode(proj)?|bundle))$</string>
-			<key>sourceDirectory</key>
-			<string>include</string>
+			<key>lastUsed</key>
+			<date>2009-10-05T03:03:26Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>Makefile</string>
 		</dict>
 		<dict>
-			<key>filename</key>
-			<string>MIT-LICENSE</string>
-		</dict>
-		<dict>
+			<key>children</key>
+			<array>
+				<dict>
+					<key>filename</key>
+					<string>src/test.erl</string>
+					<key>lastUsed</key>
+					<date>2009-10-05T04:58:46Z</date>
+				</dict>
+				<dict>
+					<key>filename</key>
+					<string>src/vice.erl</string>
+					<key>lastUsed</key>
+					<date>2009-10-05T04:58:46Z</date>
+				</dict>
+				<dict>
+					<key>filename</key>
+					<string>src/vice_encode.erl</string>
+					<key>lastUsed</key>
+					<date>2009-10-05T04:58:46Z</date>
+				</dict>
+				<dict>
+					<key>filename</key>
+					<string>src/vice_decode.erl</string>
+					<key>lastUsed</key>
+					<date>2009-10-05T04:58:47Z</date>
+				</dict>
+				<dict>
+					<key>filename</key>
+					<string>src/vice_utils.erl</string>
+					<key>lastUsed</key>
+					<date>2009-10-05T04:58:47Z</date>
+					<key>selected</key>
+					<true/>
+				</dict>
+				<dict>
+					<key>filename</key>
+					<string>src/sync.erl</string>
+					<key>lastUsed</key>
+					<date>2009-10-05T03:03:26Z</date>
+				</dict>
+			</array>
 			<key>expanded</key>
 			<true/>
 			<key>name</key>
-			<string>src</string>
-			<key>regexFolderFilter</key>
-			<string>!.*/(\.[^/]*|CVS|_darcs|_MTN|\{arch\}|blib|.*~\.nib|.*\.(framework|app|pbproj|pbxproj|xcode(proj)?|bundle))$</string>
-			<key>sourceDirectory</key>
-			<string>src</string>
+			<string>SRC</string>
 		</dict>
 	</array>
 	<key>fileHierarchyDrawerWidth</key>
 	<integer>157</integer>
 	<key>metaData</key>
-	<dict>
-		<key>src/vice.erl</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>35</integer>
-				<key>line</key>
-				<integer>8</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>src/vice_decode.erl</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>4</integer>
-				<key>line</key>
-				<integer>16</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>src/vice_encode.erl</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>8</integer>
-				<key>line</key>
-				<integer>28</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>10</integer>
-		</dict>
-		<key>src/vice_utils.erl</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>46</integer>
-				<key>line</key>
-				<integer>1</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-	</dict>
-	<key>openDocuments</key>
-	<array>
-		<string>src/vice.erl</string>
-		<string>src/vice_encode.erl</string>
-		<string>src/vice_decode.erl</string>
-		<string>src/vice_utils.erl</string>
-	</array>
+	<dict/>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>

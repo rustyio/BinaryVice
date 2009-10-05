@@ -18,9 +18,10 @@ is_placeholder(pid@) -> true;
 is_placeholder(reference@) -> true;
 is_placeholder(string@) -> true;
 is_placeholder({string@, _}) -> true;
-is_placeholder(tuple@) -> true;
 is_placeholder(list@) -> true;
 is_placeholder({list@, _}) -> true;
+is_placeholder(tuple@) -> true;
+is_placeholder({tuple@, _}) -> true;
 is_placeholder(dict@) -> true;
 is_placeholder({dict@, _, _}) -> true;
 is_placeholder(_) -> false.
@@ -42,9 +43,10 @@ ensure_matching_types(pid@, O) -> is_pid(O) orelse throw({not_a_pid, O});
 ensure_matching_types(reference@, O) -> is_reference(O) orelse throw({not_a_reference, O});
 ensure_matching_types(string@, O) -> is_list(O) orelse throw({not_a_string, O});
 ensure_matching_types({string@, _}, O) -> is_list(O) orelse throw({not_a_string, O});
-ensure_matching_types(tuple@, O) -> is_tuple(O) orelse throw({not_a_tuple, O});
 ensure_matching_types(list@, O) -> is_list(O) orelse throw({not_a_list, O});
 ensure_matching_types({list@, _}, O) -> is_list(O) orelse throw({not_a_list, O});
+ensure_matching_types(tuple@, O) -> is_tuple(O) orelse throw({not_a_tuple, O});
+ensure_matching_types({tuple@, _}, O) -> is_tuple(O) orelse throw({not_a_tuple, O});
 ensure_matching_types(dict@, O) -> is_tuple(O) orelse throw({not_a_dict, O});
 ensure_matching_types({dict@, _, _}, O) -> is_tuple(O) orelse throw({not_a_dict, O});
 ensure_matching_types(Schema, _) -> throw({ensure_matching_types, unknown_type, Schema}).

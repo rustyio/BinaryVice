@@ -1,11 +1,7 @@
 -module (vice).
--export ([to_binary/2, to_binary_with_version/3, from_binary/2, from_binary_with_version/2]).
+-export ([to_binary/2, to_binary_version/3, from_binary/2, from_binary_version/2]).
 
 % TODO -
-% - Handle lists. The placeholder should be {list@, Schema}
-% - Handle dictionaries. Convert to lists and back. Placeholder should be {'$dict$', Schema}
-% - Handle bools, one byte.
-% - Test cases.
 % - Decoding of different versions.
 
 % Schema is a term of the same structure as Term,
@@ -17,7 +13,7 @@ to_binary(Schema, Term) ->
     Response = vice_encode:to_binary(Schema, Term),
     <<Response/binary>>.
     
-to_binary_with_version(Version, Schema, Term) ->
+to_binary_version(Version, Schema, Term) ->
     (Version >=0 andalso Version < 256) orelse throw({invalid_version_number, Version}),
     Response = vice_encode:to_binary(Schema, Term),
     <<Version:8/integer, Response/binary>>.
@@ -27,7 +23,11 @@ from_binary(Schema, Binary) ->
     (Rest == <<>>) orelse throw({bytes_left_over, Binary}),
     Value.
 
-from_binary_with_version(_Versions, _Binary) -> ok.
-
-
-
+from_binary_version(Versions, Binary) -> 
+    <<Version:8/integer, Rest/binary>> = Binary,
+    case Version of 
+        131 -> {Version, binary_to_term(Binary)};
+        _   -> 
+            Schema = proplists:get_value(Version, Versions),
+            {Version, from_binary(Schema, Rest)}
+    end.
