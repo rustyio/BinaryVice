@@ -10,6 +10,7 @@ go() ->
     speed_test().
     
 datatypes_test() ->
+    test(bitstring@, <<1:1, 0:1, 1:1>>),
     test([atom@, binary@, boolean@, integer@, {integer@, 1}, string@], [atom, <<"b">>, true, -42, 9, "string"]),
     test([float@, function@, pid@, reference@], [-3.14159, fun() -> ok end, self(), make_ref()]),
     test([tuple@, list@], [{a, b, c}, [a, b, c]]),

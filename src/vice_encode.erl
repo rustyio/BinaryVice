@@ -53,6 +53,12 @@ encode(binary@, O) -> encode({binary@, 4}, O);
 encode({binary@, Size}, O) ->
     Length = size(O),
     <<Length:(Size * 8)/integer, O/binary>>;
+    
+encode(bitstring@, O) -> encode({bitstring@, 4}, O);
+encode({bitstring@, Size}, O) ->
+    Length = bit_size(O),
+    Padding = (8 - Length rem 8),
+    <<Length:(Size * 8)/integer, O/bits, 0:Padding>>;    
 
 encode(integer@, O) -> encode({integer@, 4}, O);
 encode({integer@, Size}, O) -> 

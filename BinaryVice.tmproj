@@ -19,35 +19,35 @@
 			<array>
 				<dict>
 					<key>filename</key>
-					<string>src/test.erl</string>
+					<string>src/vice_test.erl</string>
 					<key>lastUsed</key>
-					<date>2009-10-05T04:58:46Z</date>
+					<date>2009-10-05T18:21:00Z</date>
 				</dict>
 				<dict>
 					<key>filename</key>
 					<string>src/vice.erl</string>
 					<key>lastUsed</key>
-					<date>2009-10-05T04:58:46Z</date>
+					<date>2009-10-05T18:21:01Z</date>
+					<key>selected</key>
+					<true/>
 				</dict>
 				<dict>
 					<key>filename</key>
 					<string>src/vice_encode.erl</string>
 					<key>lastUsed</key>
-					<date>2009-10-05T04:58:46Z</date>
+					<date>2009-10-05T13:51:21Z</date>
 				</dict>
 				<dict>
 					<key>filename</key>
 					<string>src/vice_decode.erl</string>
 					<key>lastUsed</key>
-					<date>2009-10-05T04:58:47Z</date>
+					<date>2009-10-05T13:51:22Z</date>
 				</dict>
 				<dict>
 					<key>filename</key>
 					<string>src/vice_utils.erl</string>
 					<key>lastUsed</key>
-					<date>2009-10-05T04:58:47Z</date>
-					<key>selected</key>
-					<true/>
+					<date>2009-10-05T18:21:00Z</date>
 				</dict>
 				<dict>
 					<key>filename</key>

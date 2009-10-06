@@ -43,6 +43,14 @@ decode({binary@, Size}, B) ->
     <<Length:BitSize/integer, Binary:Length/binary, Rest/binary>> = B,
     {Binary, Rest};
 
+decode(bitstring@, B) -> decode({bitstring@, 4}, B);
+decode({bitstring@, Size}, B) ->
+    BitSize = Size * 8,
+    <<Length:BitSize/integer, Rest/binary>> = B,
+    Padding = 8 - (Length rem 8),
+    <<BitString:Length/bits, 0:Padding, Rest1/binary>> = Rest,
+    {BitString, Rest1};
+
 decode(integer@, B) -> decode({integer@, 4}, B);
 decode({integer@, Size}, B) -> 
     BitSize = Size * 8 - 1, 

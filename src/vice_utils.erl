@@ -9,6 +9,8 @@
 is_placeholder(atom@) -> true;
 is_placeholder(binary@) -> true;
 is_placeholder({binary@, _}) -> true;
+is_placeholder(bitstring@) -> true;
+is_placeholder({bitstring@, _}) -> true;
 is_placeholder(boolean@) -> true;
 is_placeholder(float@) -> true;
 is_placeholder(function@) -> true;
@@ -35,6 +37,8 @@ is_placeholder(_) -> false.
 ensure_matching_types(atom@, O) -> is_atom(O) orelse throw({not_an_atom, O});
 ensure_matching_types(binary@, O) -> is_binary(O) orelse throw({not_a_binary, O});
 ensure_matching_types({binary@, _}, O) -> is_binary(O) orelse throw({not_a_binary, O});
+ensure_matching_types(bitstring@, O) -> is_bitstring(O) orelse throw({not_a_bitstring, O});
+ensure_matching_types({bitstring@, _}, O) -> is_bitstring(O) orelse throw({not_a_bitstring, O});
 ensure_matching_types(boolean@, O) -> is_boolean(O) orelse throw({not_a_boolean, O});
 ensure_matching_types(float@, O) -> is_float(O) orelse throw({not_a_float, O});
 ensure_matching_types(function@, O) -> is_function(O) orelse throw({not_a_function, O});
@@ -56,6 +60,7 @@ ensure_matching_types(Schema, _) -> throw({ensure_matching_types, unknown_type, 
 % Return an atom that signifies the type of O.
 type(O) when is_atom(O) -> atom;
 type(O) when is_binary(O) -> binary;
+type(O) when is_bitstring(O) -> bitstring;
 type(O) when is_boolean(O) -> boolean;
 type(O) when is_float(O) -> float;
 type(O) when is_function(O) -> function;
