@@ -2,15 +2,16 @@
 -export ([from_binary/2]).
 
 from_binary(Schema, Binary) -> 
-    SchemaType = vice_utils:type(Schema),
     % If it's a placeholder, then encode it.
     % Otherwise, continue walking the structure.
     case vice_utils:is_placeholder(Schema) of
         true -> decode(Schema, Binary);
-        false -> walk(SchemaType, Schema, Binary)
+        false -> 
+            
+            walk(Schema, Binary)
     end.
     
-walk(list, Schema, Binary) -> 
+walk(Schema, Binary) when is_list(Schema) -> 
     Length = length(Schema),
     F = fun(_X, {Values, AccBinary, [S|AccSchema]}) ->
         {Value, AccBinary1} = from_binary(S, AccBinary),
@@ -19,12 +20,12 @@ walk(list, Schema, Binary) ->
     {Values1, Binary1, _} = lists:foldl(F, {[], Binary, Schema}, lists:seq(1, Length)),
     {lists:reverse(Values1), Binary1};
     
-walk(tuple, Schema, Binary) ->
-    {Values, Rest} = walk(list, tuple_to_list(Schema), Binary),
+walk(Schema, Binary) when is_tuple(Schema) ->
+    {Values, Rest} = walk(tuple_to_list(Schema), Binary),
     {list_to_tuple(Values), Rest};
         
 %%% Didn't match anything, so ignore.
-walk(_, Schema, Binary) -> 
+walk(Schema, Binary) -> 
     {Schema, Binary}.
     
     

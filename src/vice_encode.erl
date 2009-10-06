@@ -3,21 +3,16 @@
 
 %%% - TERM TO BINARY - %%%
 to_binary(Schema, Term) ->
-    SchemaType = vice_utils:type(Schema),
-
     % If it's a placeholder, then encode it.
     % Otherwise, continue walking the structure.
     case vice_utils:is_placeholder(Schema) of
         true -> 
             vice_utils:ensure_matching_types(Schema, Term),
             encode(Schema, Term);
-        false -> walk(SchemaType, Schema, Term)
+        false -> walk(Schema, Term)
     end.
-    
-walk(tuple, Schema, Term) ->
-    walk(list, tuple_to_list(Schema), tuple_to_list(Term));
-    
-walk(list, Schema, Term) -> 
+        
+walk(Schema, Term) when is_list(Schema) -> 
     case {length(Schema), length(Term)} of
         {0, 0} -> <<>>;
         {N, N} ->
@@ -29,10 +24,12 @@ walk(list, Schema, Term) ->
             B;
         _ -> throw({mismatched_lengths, Schema, Term})
     end;
-    
+
+walk(Schema, Term) when is_tuple(Schema) ->
+    walk(tuple_to_list(Schema), tuple_to_list(Term));
     
 %%% Didn't match anything, so ignore.
-walk(_, _, _) -> 
+walk(_, _) -> 
     <<>>.
 
 

@@ -1,5 +1,5 @@
 -module (vice_utils).
--export ([is_placeholder/1, ensure_matching_types/2, type/1]).
+-export ([is_placeholder/1, ensure_matching_types/2]).
 
 %%% - BINARY TO TERM - %%%
 
@@ -56,17 +56,3 @@ ensure_matching_types(dict@, O) -> is_tuple(O) orelse throw({not_a_dict, O});
 ensure_matching_types({dict@, _, _}, O) -> is_tuple(O) orelse throw({not_a_dict, O});
 ensure_matching_types(term@, _) -> true;
 ensure_matching_types(Schema, _) -> throw({ensure_matching_types, unknown_type, Schema}).
-
-% Return an atom that signifies the type of O.
-type(O) when is_atom(O) -> atom;
-type(O) when is_binary(O) -> binary;
-type(O) when is_bitstring(O) -> bitstring;
-type(O) when is_boolean(O) -> boolean;
-type(O) when is_float(O) -> float;
-type(O) when is_function(O) -> function;
-type(O) when is_integer(O) -> integer;
-type(O) when is_list(O) -> list;
-type(O) when is_pid(O) -> pid;
-type(O) when is_reference(O) -> reference;
-type(O) when is_tuple(O) -> tuple;
-type(O) -> throw({unexpected_type, O}).
