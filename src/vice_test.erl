@@ -29,7 +29,7 @@ test(Schema, Term) ->
     io:format("     Schema: ~p~n", [Schema]),
     io:format("       Term: ~p~n", [Term]),
     B = vice:to_binary(Schema, Term),
-    io:format("       size: ~p (~p orig.) ~n", [size(B), size(term_to_binary(Term))]),
+    io:format("       size: ~p (~p orig, ~p compressed) ~n", [size(B), size(term_to_binary(Term)), size(term_to_binary(Term, [compressed]))]),
     T = vice:from_binary(Schema, B),
     io:format("from_binary: ~p~n", [T]),
     Term == T orelse throw({not_equal, T, Term}).
@@ -50,11 +50,11 @@ versions_test() ->
     io:format("Version 2 successful...~n"),
     {131, {something_else}} = vice:from_binary_version(Versions, V3),
     io:format("Version 131 successful...~n"),
-    io:format("Success!"),
+    io:format("Success!~n"),
     ok.
     
     
--define (ITERATIONS, 1000).
+-define (ITERATIONS, 10000).
 speed_test() ->
     Schema = #my_object { field1=atom@, field2=integer@, field3=boolean@ },
     Term = #my_object { field1=hello, field2=5, field3=true },
@@ -67,27 +67,27 @@ speed_test() ->
         B = term_to_binary(Term, [compressed]),
         Null!B
     end || _ <- lists:seq(1, ?ITERATIONS)],
-    io:format("term_to_binary * 1000 = ~.2fms~n", [timer:now_diff(now(), Start1) / 1000]),
+    io:format("term_to_binary(compressed) * 10000 = ~.2fms~n", [timer:now_diff(now(), Start1) / 1000]),
     
     Start2 = now(),
     [begin
         B = vice:to_binary(Schema, Term),
         Null!B
     end || _ <- lists:seq(1, ?ITERATIONS)],
-    io:format("vice:to_binary * 1000 = ~.2fms~n", [timer:now_diff(now(), Start2) / 1000]),
+    io:format("vice:to_binary * 10000 = ~.2fms~n", [timer:now_diff(now(), Start2) / 1000]),
     
     Start3 = now(),
     [begin 
         T = binary_to_term(B1),
         Null!T
     end || _ <- lists:seq(1, ?ITERATIONS)],
-    io:format("binary_to_term * 1000 = ~.2fms~n", [timer:now_diff(now(), Start3) / 1000]),
+    io:format("binary_to_term * 10000 = ~.2fms~n", [timer:now_diff(now(), Start3) / 1000]),
     
     Start4 = now(),
     [begin
         T = vice:from_binary(Schema, B2),
         Null!T
     end|| _ <- lists:seq(1, ?ITERATIONS)],
-    io:format("vice:from_binary * 1000 = ~.2fms~n", [timer:now_diff(now(), Start4) / 1000]),
+    io:format("vice:from_binary * 10000 = ~.2fms~n", [timer:now_diff(now(), Start4) / 1000]),
     ok.
     

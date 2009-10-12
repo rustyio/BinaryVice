@@ -21,6 +21,7 @@ walk(Schema, Term) when is_list(Schema) ->
                 {<<AccB/binary, B/binary>>, AccSchema, AccTerm}
             end,
             {B, _, _} = lists:foldl(F, {<<>>, Schema, Term}, lists:seq(1, N)),
+						
             B;
         _ -> throw({mismatched_lengths, Schema, Term})
     end;
@@ -64,7 +65,8 @@ encode({integer@, Size}, O) ->
         false -> {0, O}
     end,
     BitSize = Size * 8 - 1,
-    <<FirstBit:1/integer, O1:BitSize/integer>>;
+    B = <<FirstBit:1/integer, O1:BitSize/integer>>,
+		B;
       
 encode(string@, O) -> encode({string@, 4}, O);
 encode({string@, Size}, O) -> encode({binary@, Size}, list_to_binary(O));

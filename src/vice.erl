@@ -1,14 +1,9 @@
 -module (vice).
 -export ([to_binary/2, to_binary_version/3, from_binary/2, from_binary_version/2]).
 
-% TODO -
-% - Decoding of different versions.
-
 % Schema is a term of the same structure as Term,
-% except that fields can be replaced by '$'. When they 
-% are, then that field is seen as a "data" field, and 
-% is serialized.
-% How are lists and dicts handled?
+% except that fields can be replaced by atom@ (or some other type). 
+% This is then seen as a "data" field, and is serialized.
 to_binary(Schema, Term) -> 
     Response = vice_encode:to_binary(Schema, Term),
     zlib:zip(Response).
