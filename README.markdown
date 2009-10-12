@@ -33,6 +33,8 @@ BinaryVice allows you to specify a schema when you encode an element with placeh
 	
 	% Our schema. Notice the 'integer@' placeholder 
 	Schema = #record { n=integer@ },
+	
+	% Encode the term...
 	B = vice:to_binary(Schema, Term)
 	
 The binary produced by vice:to_binary/1 is 6 bytes, compared to 20 bytes returned by term_to_binary/1. There are placeholders for every Erlang primitive, plus some special ones for encoding a list or dictionary where all items have the same schema.
