@@ -1,3 +1,7 @@
+% BinaryVice - Improved Erlang Serialization
+% Copyright (c) 2009 Rusty Klophaus
+% See MIT-LICENSE for licensing information.
+
 -module (vice_encode).
 -export ([to_binary/2]).
 
