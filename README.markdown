@@ -22,21 +22,24 @@ If you call term_to_binary on this tuple, Erlang needs to store information in t
 6. The second element is an integer (1 byte)
 7. The value of the integer (4 bytes)
 
-If you are keeping track, this means we have wasted 15 bytes of space in order to store 4 bytes of data. For the occasional record, the convenience of being able to serialize any term outweighs the overhead of encoding the schema of that term. However, if your application stores or transmits millions or billions of terms, this adds up.
+If you are keeping track, this means we have wasted 15 bytes of space in order to store 4 bytes of data. If your application stores or transmits millions or billions of terms, this adds up.
 
 <h2>How does BinaryVice work?</h2>
 
 BinaryVice allows you to specify a schema when you encode an element with placeholders for the information that will change. Continuing with the example above:
 
+	% Our term...
 	Term = #record { n = 5000 },
-	Schema = #record { n={integer@, 4} },
+	
+	% Our schema. Notice the 'integer@' placeholder 
+	Schema = #record { n=integer@ },
 	B = vice:to_binary(Schema, Term)
 	
-The resulting binary is 6 bytes, compared to 20 bytes returned by term_to_binary/1. There are placeholders for every Erlang primitive, plus some special ones for encoding a list or dictionary where all items have the same schema.
+The binary produced by vice:to_binary/1 is 6 bytes, compared to 20 bytes returned by term_to_binary/1. There are placeholders for every Erlang primitive, plus some special ones for encoding a list or dictionary where all items have the same schema.
 
 <h2>Versioning</h2>
 
-The one rule about a schema is that it will eventually change. When it does, BinaryVice is ready. BinaryVice allows you to encode your term with a version number. Then, when you want to decode your data, you can pass BinaryVice a list of possible versions, and BinaryVice will choose the right one. The version number can be any integer from 0 to 255 except for 131, because this number is used by term_to_binary/1.
+The one rule about a schema is that it will eventually change. When it does, BinaryVice is ready. BinaryVice allows you to encode your term with a version number. Then, when you want to decode your data, you can pass BinaryVice a list of possible versions, and BinaryVice will choose the right one. The version number can be any integer from 0 to 255 except for 131, because this number is used to identify terms encoded by term_to_binary/1.
 
 For example:
 
@@ -46,8 +49,8 @@ For example:
 	...
 	
 	% Schemas...
-	Schema1 = #my_record1 { n={integer@, 4} },
-	Schema2 = #my_record2 { n={integer@, 4}, a=atom@ }
+	Schema1 = #my_record1 { n=integer@ },
+	Schema2 = #my_record2 { n=integer@, a=atom@ }
 	Schemas = {
 		{1, Schema1},
 		{2, Schema2}
@@ -61,7 +64,9 @@ For example:
 	Term2 = #my_record2 { n = 5000, a=version_two }
 	B2 = vice:to_binary_version(2, Schema2, Term2),
 	
-	% Decode automatically detects the version.
+	% Decode automatically detects whether our
+	% term is version 1 or version 2.	
+	
 	% This returns {1, #my_record1 { n=5000}}.
 	vice:from_binary_version(Schemas, B1),
 	
@@ -73,15 +78,15 @@ For example:
 
 <h2>Drop-In Replacement</h2>
 
-BinaryVice was built so that you can drop it into your current application without worrying about migrating your existing data. The vice:from_binary_version/2 function detects when a binary was encoded using term_to_binary/1 and returns the decoded term with version 131.
+BinaryVice was built so that you can drop it into your current application without having to migrate your existing data. The vice:from_binary_version/2 function detects when a binary was encoded using term_to_binary/1 and returns the decoded term with version 131.
 
-<h2>How much space does BinaryVice save?</h2>
+<h2>BinaryVice vs. term_to_binary/1</h2>
 
-Based on some simple tests, BinaryVice makes your data about 40% smaller than term_to_binary(Term), and about 10% smaller than term_to_binary(Term, [compressed]). Your mileage may vary. 
+Based on simple tests, BinaryVice makes your data about 40% smaller than term_to_binary(Term), and about 10% smaller than term_to_binary(Term, [compressed]). 
 
-<h2>How fast is BinaryVice?</h2>
+BinaryVice is fast, but slower than term_to_binary(Term), but about 5 times faster than term_to_binary(Term, [compressed]). 
 
-BinaryVice is slower than term_to_binary(Term), as term_to_binary/1 is copying structures out of C, so is almost instantaneous. However, BinaryVice is about 5 times faster than term_to_binary(Term, [compressed]). Again, this depends on the data you are serializing, so your mileage may vary.
+Actual results depend upon your data.
 
 <h2>Interface</h2>
 
@@ -94,3 +99,6 @@ BinaryVice is slower than term_to_binary(Term), as term_to_binary/1 is copying s
 
 It vaguely rhymes with <a href="http://en.wikipedia.org/wiki/Miami_Vice">Miami Vice</a>.
 
+<h2>Disclaimer</h2>
+
+Use this at your own risk, and test thoroughly. There may be some lurking corner cases that haven't been addressed.
